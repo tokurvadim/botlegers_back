@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import CreateFormAPIView, GetFormListAPIView
+from .views import GetListCreateFormAPIView
 
 urlpatterns = [
-    path('send/', CreateFormAPIView.as_view()),
-    path('count/', GetFormListAPIView.as_view())
+    path('form/', GetListCreateFormAPIView.as_view()),
 ]
