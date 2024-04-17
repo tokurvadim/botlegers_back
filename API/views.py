@@ -1,8 +1,7 @@
-from django.shortcuts import render
 import django
+import re
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import re
 
 from .models import Request
 from core.settings import REQUEST_TYPES
@@ -11,7 +10,7 @@ class RequestHandler(APIView):
     response_data: dict = {}
     status_code: int|None = None
 
-    def set_status_code(self, status_code) -> None:
+    def set_status_code(self, status_code: int) -> None:
         self.status_code = status_code
 
     def set_response_data(self, **kwargs) -> None:
@@ -42,8 +41,8 @@ class RequestHandler(APIView):
             )
             #print(1)
         except (django.db.utils.IntegrityError, ValueError) as error:
-            error_word = error_word = re.findall(r'\.(\w+)', error.__str__())[0].upper()
-            self.set_status_code(400)
+            error_word = re.findall(r'\.(\w+)', error.__str__())[0].upper()
+            self.set_status_code(404)
             self.set_response_data(
                 status='bad',
                 error=f'''BAD_{error_word}'''
@@ -51,11 +50,10 @@ class RequestHandler(APIView):
             #print(2)
         except Exception as error:
             print(error)
-            self.set_status_code = 500
-            self.set_response_data({
-                'status': 'bad',
-                'error': 'SERVER_ERROR'
-            })
+            self.set_status_code(500)
+            self.set_response_data(
+                status='bad',
+                error='SERVER_ERROR')
             #print(3)
         finally:
             return Response(status=self.get_status_code(), data=self.get_response_data())
@@ -64,10 +62,10 @@ class RequestCounter(APIView):
     response_data: dict = {}
     status_code:int|None = None
 
-    def set_status_code(self, status_code) -> None:
+    def set_status_code(self, status_code: int) -> None:
         self.status_code = status_code
 
-    def set_response_data(self, response_data) -> None:
+    def set_response_data(self, response_data: dict) -> None:
         self.response_data = response_data
 
     def get_status_code(self) -> int|None:
