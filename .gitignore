@@ -1,6 +1,6 @@
 .env
 db.sqlite3
-API/migrations/
+api/migrations/
 core/migrations/
 __pycache__/
 venv/

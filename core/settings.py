@@ -45,8 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'phonenumber_field',
+
     'rest_framework',
-    'API'
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -91,7 +94,7 @@ DATABASES = {
 }
 
 # Request Types
-REQUEST_TYPES = json.loads(env.get('REQUEST_TYPES'))
+REQUEST_TYPES = ['bot', 'site']
 
 
 # Password validation
