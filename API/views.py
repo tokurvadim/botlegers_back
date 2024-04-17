@@ -4,89 +4,68 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Request
+from .serializers import RequestSerializer
 from core.settings import REQUEST_TYPES
 
 class RequestHandler(APIView):
     response_data: dict = {}
     status_code: int|None = None
 
-    def set_status_code(self, status_code: int) -> None:
-        self.status_code = status_code
-
-    def set_response_data(self, **kwargs) -> None:
-        for key, value in kwargs:
-            self.response_data[key] = value
-
-    def get_status_code(self) -> int|None:
-        return self.status_code
-
-    def get_response_data(self) -> dict|None:
-        return self.response_data
-
     def post(self, request) -> Response:
         #print('start1')
         try:
             #print('start2')
-            data = {k: str(v)  for (k, v) in request.data.items()}
+            data = {k: v for (k, v) in request.data.items() if len(v) != 0}
             #print(data)
-            request_obj = Request(name=data.get('name'),
-                                phone=data.get('phone'),
-                                email=data.get('email'),
-                                content=data.get('content'),
-                                type=data.get('type'))
-            request_obj.save()
-            self.set_status_code(200)
-            self.set_response_data(
-                status='ok'
-            )
+
+            serializer = RequestSerializer(data=data)
+            serializer.is_valid()
+            serializer.save()
+
+            self.status_code = 200
+            self.response_data = {
+                'ok': True
+            }
             #print(1)
-        except (django.db.utils.IntegrityError, ValueError) as error:
-            error_word = re.findall(r'\.(\w+)', error.__str__())[0].upper()
-            self.set_status_code(404)
-            self.set_response_data(
-                status='bad',
-                error=f'''BAD_{error_word}'''
-            )
+        except AssertionError as error:
+            #print(error_word)
+            self.status_code = 404
+            self.response_data = {
+                'ok': False,
+                'error': 'INVALID_DATA'
+            }
             #print(2)
         except Exception as error:
             print(error)
-            self.set_status_code(500)
-            self.set_response_data(
-                status='bad',
-                error='SERVER_ERROR')
+            self.status_code = 500
+            self.response_data = {
+                'status': 'bad',
+                'error': f'SERVER_ERROR'
+            }
             #print(3)
         finally:
-            return Response(status=self.get_status_code(), data=self.get_response_data())
+            #print('final')
+            return Response(status=self.status_code, data=self.response_data)
 
 class RequestCounter(APIView):
     response_data: dict = {}
     status_code:int|None = None
 
-    def set_status_code(self, status_code: int) -> None:
-        self.status_code = status_code
-
-    def set_response_data(self, response_data: dict) -> None:
-        self.response_data = response_data
-
-    def get_status_code(self) -> int|None:
-        return self.status_code
-
-    def get_response_data(self) -> dict:
-        return self.response_data
-
     def get(self, request) -> Response:
         try:
-            response_data: dict = {}
             for request_type in REQUEST_TYPES:
-                response_data[request_type] = Request.objects.filter(type=request_type).count()
-            self.set_response_data(response_data)
-            self.set_status_code(200)
+                self.response_data[request_type] = Request.objects.filter(type=request_type).count()
+            self.status_code = 200
+            self.response_data = {
+                'ok': True,
+                'content': self.response_data
+            }
         except Exception as error:
             print(error)
             self.response_data = {
-                'status': 'bad',
+                'ok': False,
                 'error': 'SERVER_ERROR'
             }
-            self.set_status_code(500)
+            self.status_code = 500
         finally:
-            return Response(data=self.get_response_data(), status=self.get_status_code())
+            return Response(data=self.response_data, status=self.status_code)
