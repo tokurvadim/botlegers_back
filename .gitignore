@@ -1,7 +1,5 @@
 .env
 db.sqlite3
-api/migrations/
-core/migrations/
 __pycache__/
 venv/
 .idea
