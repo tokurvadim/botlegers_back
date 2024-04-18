@@ -24,12 +24,11 @@ class GetListCreateFormAPIView(ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
 
         request_type_obj.amount += 1
         request_type_obj.save()
 
-        return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
     
 class GetRequestTypeListAPIView(ListAPIView):
     queryset = RequestType.objects.all()
