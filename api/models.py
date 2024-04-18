@@ -7,4 +7,8 @@ class FormModel(models.Model):
     phone = PhoneNumberField(blank=True)
     email = models.EmailField(null=False, blank=False)
     message = models.TextField(null=False, blank=False)
-    type = models.CharField(max_length=64, null=False, blank=False)
+    type = models.ForeignKey(to='RequestType', on_delete=models.CASCADE, max_length=32, null=False, blank=False)
+
+class RequestType(models.Model):
+    type = models.CharField(primary_key=True, max_length=32)
+    amount = models.IntegerField(default=0)

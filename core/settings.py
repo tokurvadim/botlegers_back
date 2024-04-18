@@ -45,9 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'phonenumber_field',
-
     'rest_framework',
     'api'
 ]
@@ -92,9 +90,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# Request Types
-REQUEST_TYPES = ['bot', 'site']
 
 
 # Password validation
