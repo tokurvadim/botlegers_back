@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import FormModel, RequestType
+from api.models import FormModel, ButtonModel
 
 
 class FormSerializer(serializers.ModelSerializer):
@@ -8,7 +8,8 @@ class FormSerializer(serializers.ModelSerializer):
         model = FormModel
         fields = '__all__'
 
-class RequestSerializer(serializers.ModelSerializer):
+
+class ButtonSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RequestType
+        model = ButtonModel
         fields = '__all__'
