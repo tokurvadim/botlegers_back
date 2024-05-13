@@ -8,7 +8,7 @@ class FormModel(models.Model):
     phone = PhoneNumberField(blank=True)
     email = models.EmailField(null=False, blank=False)
     message = models.TextField(null=False, blank=False)
-    button = models.CharField(max_length=32, null=False, blank=False)
+    button = models.CharField(max_length=32, null=False, blank=False, default='')
 
 
 class ButtonModel(models.Model):

@@ -1,0 +1,36 @@
+version: '3.11'
+
+volumes:
+  pgdata:
+
+services:
+
+  django:
+    build:
+      context: .
+    ports:
+      - '8000:8000'
+    container_name: django
+    env_file:
+      - /.env
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
+    command: sh -c "python manage.py makemigrations &&
+              python manage.py migrate &&
+              python manage.py runserver 0.0.0.0:8000"
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: "botlegers_db"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "root"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    

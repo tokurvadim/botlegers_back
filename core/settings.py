@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+import json
 
 from pathlib import Path
 from dotenv import load_dotenv
@@ -32,7 +33,7 @@ SECRET_KEY = env.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.get('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.get('ALLOWED_HOSTS').split(', ')
 
 # Application definition
 
@@ -89,11 +90,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env.get('PG_NAME'),
-        'USER': env.get('PG_USER'),
-        'PASSWORD': env.get('PG_PASSWORD'),
-        'HOST': env.get('PG_HOST'),
-        'PORT': env.get('PG_PORT'),
+        'NAME': env.get('POSTGRES_NAME'),
+        'USER': env.get('POSTGRES_USER'),
+        'PASSWORD': env.get('POSTGRES_PASSWORD'),
+        'HOST': env.get('POSTGRES_HOST'),
+        'PORT': env.get('POSTGRES_PORT'),
     }
 }
 
