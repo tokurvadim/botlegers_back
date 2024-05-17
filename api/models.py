@@ -11,6 +11,7 @@ class FormModel(models.Model):
     message = models.TextField(null=False, blank=False)
 
 
+
 class BriefModel(models.Model):
     name = models.CharField(max_length=128, null=False, blank=False)
     phone = PhoneNumberField(blank=True)
@@ -23,8 +24,7 @@ class BriefModel(models.Model):
     srs_link = models.URLField(null=True, blank=True)
     design_link = models.URLField(null=True, blank=True)
     portfolio = models.CharField(null=True, blank=True)
-
-
+    message = models.TextField(null=False, blank=False)
 
 
 
