@@ -28,6 +28,26 @@ class BriefModel(models.Model):
 
 
 
+class AboutUsModel(models.Model):
+    title = models.CharField(null=False, blank=False)
+    button = models.CharField(max_length=32)
+    technologies = models.JSONField()
+    description = models.TextField()
+    questions = models.JSONField()
+    advantages = models.TextField()
+
+
+
+class PortfolioModel(models.Model):
+    title = models.TextField(null=False, blank=False)
+    button = models.CharField(max_length=32)
+    description = models.CharField(null=False, blank=False)
+    done = models.JSONField()
+    feature = models.CharField(null=False, blank=False)
+    technologies = models.JSONField()
+
+
+
 class ButtonModel(models.Model):
     name = models.CharField(max_length=32, db_index=True)
     amount = models.IntegerField(default=1)
